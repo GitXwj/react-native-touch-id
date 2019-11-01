@@ -58,17 +58,17 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
     if (RCTNilIfNull([options objectForKey:@"passcodeFallback"]) != nil) {
         passcodeFallback = [RCTConvert NSNumber:options[@"passcodeFallback"]];
     }
-
+      NSLog(@"passcodeFallback: %@",passcodeFallback);
     // Device has TouchID
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&error]) {
         // Attempt Authentification
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication
                 localizedReason:reason
                           reply:^(BOOL success, NSError *error)
          {
              [self handleAttemptToUseDeviceIDWithSuccess:success error:error callback:callback];
          }];
-
+ NSLog(@"passcodeFallback1111: %@",passcodeFallback);
         // Device does not support TouchID but user wishes to use passcode fallback
     } else if ([passcodeFallback boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&error]) {
         // Attempt Authentification
@@ -78,6 +78,7 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
          {
              [self handleAttemptToUseDeviceIDWithSuccess:success error:error callback:callback];
          }];
+         NSLog(@"passcodeFallback2222: %@",passcodeFallback);
     }
     else {
         if (error) {
@@ -136,10 +137,6 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
             
         case LAErrorTouchIDNotEnrolled:
             errorReason = @"LAErrorTouchIDNotEnrolled";
-            break;
-
-        case LAErrorTouchIDLockout:
-            errorReason = @"LAErrorTouchIDLockout";
             break;
             
         default:

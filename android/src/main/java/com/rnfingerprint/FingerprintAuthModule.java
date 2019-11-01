@@ -59,10 +59,7 @@ public class FingerprintAuthModule extends ReactContextBaseJavaModule implements
 
         int result = isFingerprintAuthAvailable();
         if (result == FingerprintAuthConstants.IS_SUPPORTED) {
-            // TODO: once this package supports Android's Face Unlock,
-            // implement a method to find out which type of biometry
-            // (not just fingerprint) is actually supported
-            reactSuccessCallback.invoke("Fingerprint");
+            reactSuccessCallback.invoke("Is supported.");
         } else {
             reactErrorCallback.invoke("Not supported.", result);
         }
@@ -99,10 +96,10 @@ public class FingerprintAuthModule extends ReactContextBaseJavaModule implements
 
         final DialogResultHandler drh = new DialogResultHandler(reactErrorCallback, reactSuccessCallback);
 
-        final FingerprintDialog fingerprintDialog = new FingerprintDialog();
+        final FingerprintDialog fingerprintDialog = new FingerprintDialog(getReactApplicationContext());
         fingerprintDialog.setCryptoObject(cryptoObject);
         fingerprintDialog.setReasonForAuthentication(reason);
-        fingerprintDialog.setAuthConfig(authConfig);
+        //fingerprintDialog.setAuthConfig(authConfig);
         fingerprintDialog.setDialogCallback(drh);
 
         if (!isAppActive) {

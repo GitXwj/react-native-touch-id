@@ -1,17 +1,18 @@
-import { NativeModules, processColor } from 'react-native';
+import { NativeModules, processColor,NativeAppEventEmitter } from 'react-native';
 import { androidApiErrorMap, androidModuleErrorMap } from './data/errors';
 import { getError, TouchIDError, TouchIDUnifiedError } from './errors';
 const NativeTouchID = NativeModules.FingerprintAuth;
-
+let listener = null;
 export default {
+
   isSupported(config) {
     return new Promise((resolve, reject) => {
       NativeTouchID.isSupported(
         (error, code) => {
           return reject(createError(config, error, code));
         },
-        (biometryType) => {
-          return resolve(biometryType);
+        success => {
+          return resolve(true);
         }
       );
     });
@@ -25,8 +26,12 @@ export default {
       sensorDescription: 'Touch sensor',
       sensorErrorDescription: 'Failed',
       cancelText: 'Cancel',
-      unifiedErrors: false
+      unifiedErrors: false,
     };
+    listener && listener.remove();
+    listener = NativeAppEventEmitter.addListener('PASS_AUTH', e =>{
+      config.onShowPassword();
+    })
     var authReason = reason ? reason : ' ';
     var authConfig = Object.assign({}, DEFAULT_CONFIG, config);
     var imageColor = processColor(authConfig.imageColor);
@@ -34,6 +39,8 @@ export default {
 
     authConfig.imageColor = imageColor;
     authConfig.imageErrorColor = imageErrorColor;
+
+
 
     return new Promise((resolve, reject) => {
       NativeTouchID.authenticate(
