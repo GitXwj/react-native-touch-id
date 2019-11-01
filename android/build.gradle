@@ -1,7 +1,6 @@
 // Inspired by rayronvictor's PR #248 tp react-native-config
 // https://github.com/luggit/react-native-config/pull/248
 
-def _ext = rootProject
 
 buildscript {
   repositories {
@@ -14,17 +13,17 @@ buildscript {
   }
 
   dependencies {
-    classpath _ext.hasProperty('gradleBuildTools') ? _ext.gradleBuildTools : 'com.android.tools.build:gradle:3.4.0'
+    classpath rootProject.hasProperty('gradleBuildTools') ? rootProject.gradleBuildTools : 'com.android.tools.build:gradle:3.4.0'
   }
 }
 
 apply plugin: 'com.android.library'
 
-def _reactNativeVersion = _ext.hasProperty('reactNative') ? _ext.reactNative : '+'
-def _compileSdkVersion = _ext.hasProperty('compileSdkVersion') ? _ext.compileSdkVersion : 27
-def _buildToolsVersion = _ext.hasProperty('buildToolsVersion') ? _ext.buildToolsVersion : '27.0.3'
-def _minSdkVersion = _ext.hasProperty('minSdkVersion') ? _ext.minSdkVersion : 16
-def _targetSdkVersion = _ext.hasProperty('targetSdkVersion') ? _ext.targetSdkVersion : 27
+def _reactNativeVersion = rootProject.hasProperty('reactNative') ? rootProject.reactNative : '+'
+def _compileSdkVersion = rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : 27
+def _buildToolsVersion = rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : '27.0.3'
+def _minSdkVersion = rootProject.hasProperty('minSdkVersion') ? rootProject.minSdkVersion : 16
+def _targetSdkVersion = rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : 27
 
 android {
   compileSdkVersion _compileSdkVersion
